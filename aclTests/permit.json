@@ -1,0 +1,9 @@
+{
+    "permit" : [
+        {
+            "dstIps" : "158.175.122.199/32",
+            "ipProtocols" : ["tcp"],
+            "dstPorts" : ["80", "8080"]
+        }
+}
+    
