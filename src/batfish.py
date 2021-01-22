@@ -1,6 +1,7 @@
 import os
 import json
 
+import urllib.request
 import pandas as pd
 from pybatfish.client.commands import *
 from pybatfish.datamodel import *
@@ -15,12 +16,21 @@ BF_HOST = os.getenv('BF_HOST')
 NETWORK_NAME = "demo_network"
 SNAPSHOT_NAME = "current"
 
+
+print('Beginning file download with urllib2...')
+
+url = 'http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg'
+urllib.request.urlretrieve(url, '/batfish/demo.zip')
+
+SNAPSHOT_PATH = "/batfish/demo.zip"
 SNAPSHOT_PATH = "/batfish/networks/demo"
 
 # Now create the network and initialize the snapshot
 bf_session.host = BF_HOST
 load_questions()
 bf_set_network(NETWORK_NAME)
+# Can we download a zip of the configs to upload to batfish server?
+# https://batfish.readthedocs.io/en/stable/batfish_commands.html#pybatfish.client.commands.bf_init_snapshot
 bf_init_snapshot(SNAPSHOT_PATH, name=SNAPSHOT_NAME, overwrite=True)
 
 node_name = "DMZ-LF18"  # The router to change
