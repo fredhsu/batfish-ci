@@ -19,11 +19,13 @@ SNAPSHOT_NAME = "current"
 
 print('Beginning file download with urllib2...')
 
-url = 'http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg'
-urllib.request.urlretrieve(url, '/batfish/demo.zip')
+# TODO change this to be input as env var
+url = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/jobs/artifacts/master/raw/demo.zip?job=buildconfigs'
+# url = "http://www.google.com"
+urllib.request.urlretrieve(url, 'demo.zip')
 
 SNAPSHOT_PATH = "/batfish/demo.zip"
-SNAPSHOT_PATH = "/batfish/networks/demo"
+# SNAPSHOT_PATH = "/batfish/networks/demo"
 
 # Now create the network and initialize the snapshot
 bf_session.host = BF_HOST
@@ -41,13 +43,16 @@ filter_name = "demo"      # Name of the ACL to change
 #                                    ipProtocols=["tcp"],
 #                                    dstPorts="80, 8080")
 # 158.175.122.199
-# TODO Pull destinations to be checked
-with open('aclTest/permit.json') as permit_file:
+# TODO Pull destinations tol be checked
+permiturl = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/raw/master/permit.json'
+urllib.request.urlretrieve(permiturl, 'permit.json')
+with open('/batfish/permit.json') as permit_file:
     data = json.load(permit_file)
     for p in data['permit']:
-        change_traffic = HeaderConstraints(dstIps=p.dstIps,
-                                   ipProtocols=p.ipProtocols,
-                                   dstPorts=p.dstPorts)
+        print(p)
+        change_traffic = HeaderConstraints(dstIps=p["dstIps"],
+                                   ipProtocols=p["ipProtocols"],
+                                   dstPorts=p["dstPorts"])
         answer = bfq.searchFilters(headers=change_traffic,
                                    filters=filter_name,
                                    nodes=node_name,
