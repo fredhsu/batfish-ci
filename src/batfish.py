@@ -22,7 +22,7 @@ print('Beginning file download with urllib2...')
 # TODO change this to be input as env var
 url = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/jobs/artifacts/master/raw/demo.zip?job=buildconfigs'
 # url = "http://www.google.com"
-urllib.request.urlretrieve(url, 'demo.zip')
+urllib.request.urlretrieve(url, '/batfish/demo.zip')
 
 SNAPSHOT_PATH = "/batfish/demo.zip"
 # SNAPSHOT_PATH = "/batfish/networks/demo"
@@ -45,14 +45,14 @@ filter_name = "demo"      # Name of the ACL to change
 # 158.175.122.199
 # TODO Pull destinations tol be checked
 permiturl = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/raw/master/permit.json'
-urllib.request.urlretrieve(permiturl, 'permit.json')
+urllib.request.urlretrieve(permiturl, '/batfish/permit.json')
 with open('/batfish/permit.json') as permit_file:
     data = json.load(permit_file)
     for p in data['permit']:
         print(p)
         change_traffic = HeaderConstraints(dstIps=p["dstIps"],
-                                   ipProtocols=p["ipProtocols"],
-                                   dstPorts=p["dstPorts"])
+                                           ipProtocols=p["ipProtocols"],
+                                           dstPorts=p["dstPorts"])
         answer = bfq.searchFilters(headers=change_traffic,
                                    filters=filter_name,
                                    nodes=node_name,
@@ -67,7 +67,7 @@ with open('/batfish/permit.json') as permit_file:
 #                            nodes=node_name,
 #                            action="permit").answer(
 #                                snapshot=SNAPSHOT_NAME)
-# 
+#
 # If the frame is empty, then the host traffic given was not allowed and we should fail with exit code 1
 # otherwise, exit normally with exit code 0
 if answer.frame().empty:
