@@ -9,8 +9,13 @@ docker run -v /Users/fredlhsu/python/batfish/networks:/batfish/networks --rm pyb
 ## TODO
 - [x] Externalize directory that holds configs - use -v when executing - remove copy commands
 - [ ] Externalize directory that holds hosts - use -v when executing - remove copy commands
-- [ ] Pulls devices from list
-- [ ] Pulls hosts that should be reachable from permit list
-- [ ] Pulls hosts that should be reachable external source
+- [x] Pulls devices from list
+- [x] Pulls hosts that should be reachable from permit list
+- [x] Pulls hosts that should be reachable external source
+- [ ] Add test cases
+- [ ] Remove keys
+- [ ] Move code to functions
+
+
 
 

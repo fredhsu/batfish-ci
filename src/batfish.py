@@ -48,16 +48,12 @@ bf_init_snapshot(SNAPSHOT_PATH, name=SNAPSHOT_NAME, overwrite=True)
 # node_name = "DMZ-LF18"  # The router to change
 filter_name = "demo"      # Name of the ACL to change
 
-print(bfq.nodeProperties(properties='Configuration_Format').answer())
 result = bfq.nodeProperties().answer().frame()
-print(result.iloc[0]["IP_Access_Lists"])
 permiturl = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/raw/master/permit.json'
 permit_url = GITLAB_API_URL + "/projects/" + GITLAB_PROJECT_ID + \
     "/repository/files" + "/permit.json" + "/raw?ref=master"
 resp = requests.get(permit_url, headers=tokenheader)
 permits = resp.json()
-# https://gitlab.example.com/api/v4/projects/13083/repository/files/app%2Fmodels%2Fkey%2Erb/raw?ref=master"
-# urllib.request.urlretrieve(permiturl, '/batfish/permit.json')
 for p in permits['permit']:
     headers = HeaderConstraints(dstIps=p["dstIps"],
                                 ipProtocols=p["ipProtocols"],
