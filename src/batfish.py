@@ -2,7 +2,6 @@ import os
 import json
 import requests
 
-# import urllib.request
 import pandas as pd
 from pybatfish.client.commands import *
 from pybatfish.datamodel import *
@@ -58,8 +57,7 @@ permit_url = GITLAB_API_URL + "/projects/" + GITLAB_PROJECT_ID + \
 resp = requests.get(permit_url, headers=tokenheader)
 permits = resp.json()
 # https://gitlab.example.com/api/v4/projects/13083/repository/files/app%2Fmodels%2Fkey%2Erb/raw?ref=master"
-urllib.request.urlretrieve(permiturl, '/batfish/permit.json')
-print("Going to parse the permit")
+# urllib.request.urlretrieve(permiturl, '/batfish/permit.json')
 for p in permits['permit']:
     headers = HeaderConstraints(dstIps=p["dstIps"],
                                 ipProtocols=p["ipProtocols"],
@@ -74,31 +72,4 @@ for p in permits['permit']:
     else:
         continue
 
-
-# print("Going to use downloaded file")
-# with open('/batfish/permit.json') as permit_file:
-#     data = json.load(permit_file)
-#     for p in data['permit']:
-#         headers = HeaderConstraints(dstIps=p["dstIps"],
-#                                     ipProtocols=p["ipProtocols"],
-#                                     dstPorts=p["dstPorts"])
-#         # print(headers)
-#         answer = bfq.searchFilters(headers=headers,
-#                                    action="permit").answer(
-#                                        snapshot=SNAPSHOT_NAME)
-#         print(answer.frame())
-#         if answer.frame().empty:
-#             exit(1)
-#         else:
-#             continue
-
-# Check if the intended traffic is already permitted in the current snapshot
-# answer = bfq.searchFilters(headers=change_traffic,
-#                            filters=filter_name,
-#                            nodes=node_name,
-#                            action="permit").answer(
-#                                snapshot=SNAPSHOT_NAME)
-#
-# If the frame is empty, then the host traffic given was not allowed and we should fail with exit code 1
-# otherwise, exit normally with exit code 0
 exit(0)
