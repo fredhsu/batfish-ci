@@ -15,6 +15,9 @@ docker run -v /Users/fredlhsu/python/batfish/networks:/batfish/networks --rm pyb
 - [ ] Add test cases
 - [ ] Remove keys
 - [ ] Move code to functions
+- [ ] Use requirements in dockerfile
+- [ ] Switch container to alpine
+
 
 
 
