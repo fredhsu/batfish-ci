@@ -19,6 +19,7 @@ SNAPSHOT_NAME = "new"
 SNAPSHOT_PATH = "/batfish/demo.zip"
 GITLAB_PROJECT_ID = os.getenv('GITLAB_PROJECT_ID')
 GITLAB_API_URL = "http://dmz-gitlab.sjc.aristanetworks.com/api/v4"
+GITLAB_BRANCH = os.getenv('CI_COMMIT_BRANCH')
 PRIVATE_TOKEN = os.getenv('GITLAB_PRIVATE_TOKEN')
 
 
@@ -34,6 +35,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
+print(f"Executing on branch {GITLAB_BRANCH}")
 joburl = GITLAB_API_URL + "/projects/" + GITLAB_PROJECT_ID + "/jobs"
 tokenheader = {'PRIVATE-TOKEN':  PRIVATE_TOKEN}
 # print(joburl)
@@ -74,9 +76,9 @@ acl_snapshot = bf_session.init_snapshot_from_text(
 # filter_name = "demo"      # Name of the ACL to change
 
 result = bfq.nodeProperties().answer().frame()
-permiturl = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/raw/master/permit.json'
+# permiturl = 'http://dmz-gitlab.sjc.aristanetworks.com/network/cloudvision/-/raw/master/permit.json'
 permit_url = GITLAB_API_URL + "/projects/" + GITLAB_PROJECT_ID + \
-    "/repository/files" + "/permit.json" + "/raw?ref=master"
+    "/repository/files" + "/permit.json" + "/raw?ref=" + GITLAB_BRANCH
 resp = requests.get(permit_url, headers=tokenheader)
 permits = resp.json()
 print(f"ACL SNAPSHOT: {acl_snapshot}")
@@ -97,7 +99,7 @@ for p in permits['permit']:
             f"{bcolors.FAIL}*** Traffic is unable to reach {headers.dstIps}{bcolors.ENDC}")
         exit(1)
     else:
-        print(f"{bcolors.OKGREEN}*** All necessary hosts are reachable{bcolors.ENDC}")
+        print(f"{bcolors.OKGREEN}*** Host {headers.dstIps} is reachable{bcolors.ENDC}")
         continue
 
 exit(0)
